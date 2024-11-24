@@ -1699,6 +1699,7 @@ libtrace
 libtrng
 libucl
 libunibreak
+libunicode
 libuninameslist
 libunistring
 libunwind
