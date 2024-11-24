@@ -1,4 +1,5 @@
 [
   "nghttp2",
+  "libunicode",
   "poac"
 ]
