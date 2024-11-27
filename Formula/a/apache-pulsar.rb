@@ -14,10 +14,15 @@ class ApachePulsar < Formula
   end
 
   depends_on "maven" => :build
-  depends_on arch: :x86_64 # https://github.com/grpc/grpc-java/issues/7690
+  depends_on "protoc-gen-grpc-java" => :build
   depends_on "openjdk@21"
 
   def install
+    # Avoid using pre-built `protoc-gen-grpc-java`
+    grpc_java_files = ["pulsar-client/pom.xml", "pulsar-functions/proto/pom.xml"]
+    plugin_artifact = "io.grpc:protoc-gen-grpc-java:${protoc-gen-grpc-java.version}:exe:${os.detected.classifier}"
+    inreplace grpc_java_files, %r{<pluginArtifact>#{Regexp.escape(plugin_artifact)}\s*</pluginArtifact>}, ""
+
     java_home_env = Language::Java.java_home_env("21")
     with_env(TMPDIR: buildpath, **java_home_env) do
       system "mvn", "clean", "package", "-DskipTests", "-Pcore-modules"
