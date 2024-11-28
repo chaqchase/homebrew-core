@@ -1,10 +1,9 @@
 class Colmap < Formula
   desc "Structure-from-Motion and Multi-View Stereo"
   homepage "https://colmap.github.io/"
-  url "https://github.com/colmap/colmap/archive/refs/tags/3.10.tar.gz"
-  sha256 "61850f323e201ab6a1abbfb0e4a8b3ba1c4cedbf55e0a5716bdea1df8ae1813a"
+  url "https://github.com/colmap/colmap/archive/refs/tags/3.11.0.tar.gz"
+  sha256 "8da471b0f5baa3bdd940f1778ffe338738eb47b90b4d03dcd8da6b9810014844"
   license "BSD-3-Clause"
-  revision 1
 
   bottle do
     sha256 cellar: :any,                 arm64_sequoia:  "46c7b82e649ec870d6d3cc2c0afa10e6440415a106c7125b5e32c4f0fddd9ce1"
@@ -30,6 +29,7 @@ class Colmap < Formula
   depends_on "gmp"
   depends_on "lz4"
   depends_on "metis"
+  depends_on "poselib"
   depends_on "qt@5"
   depends_on "suite-sparse"
 
@@ -45,10 +45,6 @@ class Colmap < Formula
     depends_on "mesa"
   end
 
-  # Remove this patch after https://github.com/colmap/colmap/pull/2338 is included in
-  # a future release
-  patch :DATA
-
   def install
     ENV.append_path "CMAKE_PREFIX_PATH", Formula["qt@5"].prefix
 
@@ -62,31 +58,3 @@ class Colmap < Formula
     assert_path_exists (testpath / "db")
   end
 end
-
-__END__
-diff --git a/src/colmap/image/line.cc b/src/colmap/image/line.cc
-index 3637c3dc..33fff7da 100644
---- a/src/colmap/image/line.cc
-+++ b/src/colmap/image/line.cc
-@@ -27,6 +27,8 @@
- // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- // POSSIBILITY OF SUCH DAMAGE.
- 
-+#include <memory>
-+
- #include "colmap/image/line.h"
- 
- #include "colmap/util/logging.h"
-diff --git a/src/colmap/mvs/workspace.h b/src/colmap/mvs/workspace.h
-index 73d21b78..6d2c862c 100644
---- a/src/colmap/mvs/workspace.h
-+++ b/src/colmap/mvs/workspace.h
-@@ -29,6 +29,8 @@
- 
- #pragma once
- 
-+#include <memory>
-+
- #include "colmap/mvs/consistency_graph.h"
- #include "colmap/mvs/depth_map.h"
- #include "colmap/mvs/model.h"
