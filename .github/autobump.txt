@@ -1803,6 +1803,7 @@ lucky-commit
 luit
 lune
 lunzip
+lutok
 luv
 lux
 lwtools
